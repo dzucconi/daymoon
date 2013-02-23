@@ -1,15 +1,31 @@
 $(function() {
-  var $moon = $("#moon");
+  soundManager.debugMode     = false;
+  soundManager.preferFlash   = false; 
+  soundManager.useHTML5Audio = true;
+  
+  soundManager.onready(function() {
+    var pop = soundManager.createSound({
+      id: "pop",
+      url: "audio/pop.wav",
+      autoLoad: true,
+      autoPlay: false,
+      loops: 1,
+      volume: 100
+    });
 
-  function hide() {
-    $moon.hide();
-  }
+    var $moon = $("#moon");
 
-  function show() {
-    $moon.show();
-    
-    setTimeout(hide, 50);
-  }
+    function hide() {
+      $moon.hide();
+    }
 
-  setInterval(show, 1000);
+    function show() {
+      $moon.show();
+      pop.play();
+      
+      setTimeout(hide, 50);
+    }
+
+    setInterval(show, 5000);
+  });
 });
