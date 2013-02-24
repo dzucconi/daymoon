@@ -1,0 +1,1 @@
+Flashbulb pop occurs at 56ms and lasts until 140ms (84ms)
