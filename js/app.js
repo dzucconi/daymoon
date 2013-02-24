@@ -4,28 +4,39 @@ $(function() {
   soundManager.useHTML5Audio = true;
   
   soundManager.onready(function() {
-    var pop = soundManager.createSound({
+    var pop,
+        $moon,
+        hideMoon,
+        showMoon,
+        init;
+
+    pop = soundManager.createSound({
       id: "pop",
-      url: "audio/pop.wav",
+      url: "audio/pop.mp3",
       autoLoad: true,
       autoPlay: false,
       loops: 1,
       volume: 100
     });
 
-    var $moon = $("#moon");
+    $moon = $("#moon");
 
-    function hide() {
-      $moon.hide();
-    }
+    hideMoon = function() { $moon.hide(); }
 
-    function show() {
+    showMoon = function() {
       $moon.show();
-      pop.play();
-      
-      setTimeout(hide, 50);
+      setTimeout(hideMoon, 84); // Hides moon after 84ms
     }
 
-    setInterval(show, 5000);
+    init = function() {
+      pop.play(); // Plays immediately
+      setTimeout(showMoon, 56); // Displays moon after 56ms
+    }
+
+    // setInterval(init, 2000);
+    
+    $("body").on("click", function() {
+      init();
+    });
   });
 });
