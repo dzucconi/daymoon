@@ -26,11 +26,13 @@
   if (typeof window.ontouchstart !== "undefined") { Utils.events.click = "tap"; }
 
   soundManager.setup({
-    debugMode  : false,
-    debugFlash : false,
-    url        : "swf",
+    debugMode     : false,
+    debugFlash    : false,
+    preferFlash   : false,
+    useHTML5Audio : true,
+    url           : "swf",
 
-    onready    : function() {
+    onready: function() {
       var Daymoon = {
         options: function(params) {
           this.mode     = params.mode     || "manual",
