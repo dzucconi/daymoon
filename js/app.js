@@ -21,11 +21,13 @@ $(function() {
 
     $moon = $("#moon");
 
-    hideMoon = function() { $moon.hide(); }
+    hideMoon = function() {
+      $moon.fadeOut(84); // Fades out in 84ms
+    }
 
     showMoon = function() {
       $moon.show();
-      setTimeout(hideMoon, 84); // Hides moon after 84ms
+      hideMoon();
     }
 
     init = function() {
