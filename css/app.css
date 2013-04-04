@@ -12,7 +12,14 @@ body {
   margin: 0;
   padding: 0;
   background-color: #000;
+
+  -webkit-transition: background-color 0.1s;
+     -moz-transition: background-color 0.1s;
+       -o-transition: background-color 0.1s;
+          transition: background-color 0.1s;
+
 }
+  body.loading { background-color: #fff; }
 
 #moon {
   position: fixed;

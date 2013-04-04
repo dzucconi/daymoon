@@ -47,7 +47,8 @@
           autoLoad : true,
           autoPlay : false,
           loops    : 1,
-          volume   : 100
+          volume   : 100,
+          onload   : function() { Daymoon.init(); }
         }),
 
         hide: function() {
@@ -67,19 +68,24 @@
 
           // Displays moon after 56ms
           setTimeout(Daymoon.show, 56);
+        },
+        
+        init: function() {
+          var $el = $("body"),
+              options = new Daymoon.options(Utils.getParams());
+
+          $el.removeClass("loading");
+
+          if (options.mode === "auto") {
+            setInterval(Daymoon.strobe, options.interval);
+          } else {
+            $el.on(Utils.events.click, function(e) {
+              e.preventDefault();
+
+              Daymoon.strobe();
+            });
+          }
         }
-      }
-
-      // Init
-      var options = new Daymoon.options(Utils.getParams());
-
-      if (options.mode === "auto") {
-        setInterval(Daymoon.strobe, options.interval);
-      } else {
-        // Implicitly manual
-        $("body").on(Utils.events.click, function(e) {
-          Daymoon.strobe();
-        });
       }
     } // soundManager.onready
   }); // soundManager
