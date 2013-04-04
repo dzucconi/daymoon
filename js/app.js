@@ -1,17 +1,40 @@
 (function() {
   "use strict";
 
-  var Utils = {
-    events: {
-      click : "click"
+  var DAYMOON = {};
+
+  soundManager.setup({
+    debugMode: false,
+    debugFlash: false,
+    preferFlash: false,
+    useHTML5Audio: true,
+    useHighPerformance: true,
+    url: "swf",
+    onready: function() {
+      soundManager.createSound({
+        id: "pop",
+        url: ["audio/pop.ogg", "audio/pop.mp3"],
+        autoLoad: true,
+        autoPlay: false,
+        loops: 1,
+        volume: 100,
+        onload: function() { DAYMOON.view.init(); }
+      });
+    }
+  });
+
+  DAYMOON.utils = {
+    hashes: function() {
+      return window.location.href.slice(
+        window.location.href.indexOf("?") + 1
+      ).split("&");
     },
 
-    getParams: function () {
+    params: function () {
       var i,
-        hash,
-        vars = {},
-        hashes = window.location.href.slice(window.location.href.indexOf("?") + 1)
-                                     .split("&");
+          hash,
+          hashes = this.hashes(),
+          vars = {};
 
       for (i = hashes.length - 1; i >= 0; i--) {
         hash = hashes[i].split("=");
@@ -22,74 +45,55 @@
     }
   }
 
-  // Switch to using tap event if on a touch device
-  if (typeof window.ontouchstart !== "undefined") { Utils.events.click = "tap"; }
+  DAYMOON.view = {
+    optionsSet: function(params) {
+      this.mode = params.mode || "manual",
+      this.interval = params.interval || 3000
+    },
 
-  soundManager.setup({
-    debugMode           : true,
-    debugFlash          : false,
-    preferFlash         : false,
-    useHTML5Audio       : true,
-    useHighPerformance  : true,
-    url                 : "swf",
+    strobeIn: function() {
+      this.$el.css({ opacity: 1 });
+      
+      this.strobeOut();
+    },
 
-    onready: function() {
-      var Daymoon = {
-        options: function(params) {
-          this.mode     = params.mode     || "manual",
-          this.interval = params.interval || 3000
-        },
+    strobeOut: function() {
+      // Fade out with a duration of 84ms
+      this.$el.animate({ opacity: 0 }, 84);
+    },
 
-        $el: $("#moon"),
+    strobe: function() {
+      // Plays immediately
+      soundManager.sounds.pop.play();
 
-        pop: soundManager.createSound({
-          id       : "pop",
-          url      : ["audio/pop.ogg", "audio/pop.mp3"],
-          autoLoad : true,
-          autoPlay : false,
-          loops    : 1,
-          volume   : 100,
-          onload   : function() { Daymoon.init(); }
-        }),
+      // Displays moon after 56ms
+      setTimeout(DAYMOON.view.strobeIn(), 56);
+    },
 
-        hide: function() {
-          // Fade out with a duration of 84ms
-          Daymoon.$el.animate({ opacity: 0 }, 84);
-        },
+    init: function() {
+      var _this = this;
 
-        show: function() {
-          Daymoon.$el.css({ opacity: 1 });
-          
-          Daymoon.hide();
-        },
+      _this.$container = $("body");
+      _this.$el = $("#moon");
+      _this.options = new this.optionsSet(DAYMOON.utils.params());
+      
+      $(document).imagesLoaded(function() { _this.run(); });
+    },
 
-        strobe: function() {
-          // Plays immediately
-          Daymoon.pop.play();
+    run: function() {
+      var _this = this;
 
-          // Displays moon after 56ms
-          setTimeout(Daymoon.show, 56);
-        },
-        
-        init: function() {
-          var $el = $("body"),
-              options = new Daymoon.options(Utils.getParams());
+      _this.$container.removeClass("loading");
 
-          $el.imagesLoaded(function(){
-            $el.removeClass("loading");
+      if (_this.options.mode === "auto") {
+        setInterval(_this.strobe, _this.options.interval);
+      } else {
+        _this.$el.on("click tap", function(e) {
+          e.preventDefault();
 
-            if (options.mode === "auto") {
-              setInterval(Daymoon.strobe, options.interval);
-            } else {
-              $el.on(Utils.events.click, function(e) {
-                e.preventDefault();
-
-                Daymoon.strobe();
-              });
-            }
-          });
-        }
+          _this.strobe();
+        });
       }
-    } // soundManager.onready
-  }); // soundManager
+    }
+  }
 })();
