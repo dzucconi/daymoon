@@ -74,17 +74,19 @@
           var $el = $("body"),
               options = new Daymoon.options(Utils.getParams());
 
-          $el.removeClass("loading");
+          $el.imagesLoaded(function(){
+            $el.removeClass("loading");
 
-          if (options.mode === "auto") {
-            setInterval(Daymoon.strobe, options.interval);
-          } else {
-            $el.on(Utils.events.click, function(e) {
-              e.preventDefault();
+            if (options.mode === "auto") {
+              setInterval(Daymoon.strobe, options.interval);
+            } else {
+              $el.on(Utils.events.click, function(e) {
+                e.preventDefault();
 
-              Daymoon.strobe();
-            });
-          }
+                Daymoon.strobe();
+              });
+            }
+          });
         }
       }
     } // soundManager.onready
