@@ -26,7 +26,7 @@
   if (typeof window.ontouchstart !== "undefined") { Utils.events.click = "tap"; }
 
   soundManager.setup({
-    debugMode           : false,
+    debugMode           : true,
     debugFlash          : false,
     preferFlash         : false,
     useHTML5Audio       : true,
