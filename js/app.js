@@ -18,7 +18,8 @@
         autoPlay: false,
         loops: 1,
         volume: 100,
-        onload: function() { DAYMOON.view.init(); }
+        onload: function() { DAYMOON.view.init(); },
+        onplay: function() { DAYMOON.view.queueStrobe(); }
       });
     }
   });
@@ -65,7 +66,9 @@
     strobe: function() {
       // Plays immediately
       soundManager.sounds.pop.play();
+    },
 
+    queueStrobe: function() {
       // Displays moon after 56ms
       setTimeout(DAYMOON.view.strobeIn(), 56);
     },
