@@ -26,11 +26,12 @@
   if (typeof window.ontouchstart !== "undefined") { Utils.events.click = "tap"; }
 
   soundManager.setup({
-    debugMode     : false,
-    debugFlash    : false,
-    preferFlash   : false,
-    useHTML5Audio : true,
-    url           : "swf",
+    debugMode           : true,
+    debugFlash          : false,
+    preferFlash         : false,
+    useHTML5Audio       : true,
+    useHighPerformance  : true,
+    url                 : "swf",
 
     onready: function() {
       var Daymoon = {
@@ -43,7 +44,7 @@
 
         pop: soundManager.createSound({
           id       : "pop",
-          url      : "audio/pop.mp3",
+          url      : ["audio/pop.ogg", "audio/pop.mp3"],
           autoLoad : true,
           autoPlay : false,
           loops    : 1,
