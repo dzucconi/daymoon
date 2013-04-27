@@ -10,11 +10,12 @@
     useHTML5Audio: true,
     useHighPerformance: true,
     url: "swf",
+
     onready: function() {
       soundManager.createSound({
         id: "pop",
         url: ["audio/pop.ogg", "audio/pop.mp3"],
-        autoLoad: true,
+        autoLoad: DAYMOON.utils.autoLoad(),
         autoPlay: false,
         loops: 1,
         volume: 100,
@@ -25,6 +26,10 @@
   });
 
   DAYMOON.utils = {
+    autoLoad: function() {
+      return navigator.userAgent.match(/(iPad|iPhone|iPod)/g) ? false : true;
+    },
+
     hashes: function() {
       return window.location.href.slice(
         window.location.href.indexOf("?") + 1
@@ -91,12 +96,17 @@
       if (_this.options.mode === "auto") {
         setInterval(_this.strobe, _this.options.interval);
       } else {
-        _this.$el.on("click tap", function(e) {
+        $(document).on("click tap", function(e) {
           e.preventDefault();
 
           _this.strobe();
         });
       }
     }
+  }
+
+  // Init for iOS
+  if (DAYMOON.utils.autoLoad() === false) {
+    $(function(){ DAYMOON.view.init(); });
   }
 })();
