@@ -12,6 +12,7 @@ body {
   margin: 0;
   padding: 0;
   background-color: #000;
+  cursor: pointer;
 
   -webkit-transition: background-color 0.5s;
      -moz-transition: background-color 0.5s;
